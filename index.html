@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ACML 1.0 – Documentação</title>
+<meta name="description" content="Especificação do ACML 1.0: elementos, regras do XSD, tipos de estrutura e modos de uso do formato.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+
+<header class="topbar">
+  <button type="button" id="menu-btn" class="icon-btn" aria-expanded="false" aria-controls="sidebar">Menu</button>
+  <a class="brand" href="#inicio"><strong>ACML</strong> <span>1.0</span></a>
+  <a class="nav-btn" href="upload.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M4 17v2a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-2"/></svg>Enviar .acml</a>
+  <a class="icon-link" href="https://github.com/Emanoel-Gomes/ACML" target="_blank" rel="noopener" aria-label="ACML no GitHub (abre em nova aba)"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 8.36 22.9c.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.08-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.16-1.18 3.16-1.18.63 1.59.23 2.76.11 3.05.74.8 1.19 1.82 1.19 3.08 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg></a>
+</header>
+
+<div class="layout">
+  <nav id="sidebar" aria-label="Seções da documentação">
+    <ol>
+      <li><a href="#visao-geral">Visão geral</a></li>
+      <li><a href="#elementos">1. Elementos</a>
+        <ul>
+          <li><a href="#el-acml">&lt;acml&gt;</a></li>
+          <li><a href="#el-structure">&lt;structure&gt;</a></li>
+          <li><a href="#el-description">&lt;description&gt;</a></li>
+          <li><a href="#el-node">&lt;node&gt;</a></li>
+          <li><a href="#el-nodes">&lt;nodes&gt;</a></li>
+          <li><a href="#el-value">&lt;value&gt;</a></li>
+          <li><a href="#el-edges">&lt;edges&gt;</a></li>
+          <li><a href="#el-edge">&lt;edge&gt;</a></li>
+        </ul>
+      </li>
+      <li><a href="#tipos">2. Os três tipos</a></li>
+      <li><a href="#xsd">3. Regras do XSD</a></li>
+      <li><a href="#consistencia">4. Regras de consistência</a></li>
+      <li><a href="#estruturas">5. Estruturas suportadas</a>
+        <ul>
+          <li><a href="#listas">Listas</a></li>
+          <li><a href="#arvores">Árvores</a></li>
+          <li><a href="#grafos">Grafos</a></li>
+        </ul>
+      </li>
+      <li><a href="#nao-suporta">6. Não suportado</a></li>
+    </ol>
+  </nav>
+
+  <main id="conteudo" tabindex="-1">
+    <section id="inicio" class="hero">
+      <h1>ACML 1.0: especificação</h1>
+      <p class="lead" id="visao-geral">ACML (<em>Accessible Component Markup Language</em>) é um formato XML para descrever o <strong>conteúdo</strong> e a <strong>estrutura</strong> de uma árvore, uma lista ou um grafo, de modo que um leitor de tela possa navegar e falar cada parte. Teclas, histórico e frases de navegação são responsabilidade do leitor, não do arquivo.</p>
+      <dl class="facts">
+        <div><dt>Extensão</dt><dd><code>.acml</code></dd></div>
+        <div><dt>Namespace</dt><dd><code>http://acml.example.org/1.0</code></dd></div>
+        <div><dt>Schema</dt><dd><code>acml-1.0.xsd</code></dd></div>
+        <div><dt>Escopo</dt><dd>uma estrutura por arquivo: <code>tree</code>, <code>list</code> ou <code>graph</code></dd></div>
+      </dl>
+    </section>
+
+    <section id="elementos">
+      <h2>1. Elementos</h2>
+
+      <article class="el" id="el-acml">
+        <h3>&lt;acml&gt;</h3>
+        <p>Elemento raiz do documento.</p>
+        <ul>
+          <li><b>Contém:</b> uma <code>&lt;structure&gt;</code>.</li>
+          <li><b>Atributos:</b>
+            <ul>
+              <li><code>version</code> (obrigatório): <code>1.0</code>.</li>
+              <li><code>xml:lang</code> (obrigatório): idioma do conteúdo, por exemplo <code>pt-BR</code>. Orienta a voz do leitor.</li>
+            </ul>
+          </li>
+        </ul>
+      </article>
+
+      <article class="el" id="el-structure">
+        <h3>&lt;structure&gt;</h3>
+        <p>A estrutura descrita pelo arquivo.</p>
+        <ul>
+          <li><b>Atributos:</b>
+            <ul>
+              <li><code>type</code> (obrigatório): <code>tree</code>, <code>list</code> ou <code>graph</code>.</li>
+              <li><code>start</code> (obrigatório): <code>id</code> do nó em que o leitor começa.</li>
+            </ul>
+          </li>
+        </ul>
+      </article>
+
+      <article class="el" id="el-description">
+        <h3>&lt;description&gt;</h3>
+        <p>Frase que descreve a estrutura inteira.</p>
+        <ul>
+          <li><b>Contém:</b> texto em uma linha, terminado em <code>.</code>, <code>!</code> ou <code>?</code>.</li>
+          <li><b>Atributos:</b> nenhum.</li>
+        </ul>
+      </article>
+
+      <article class="el" id="el-node">
+        <h3>&lt;node&gt;</h3>
+        <p>Um nó da estrutura.</p>
+        <ul>
+          <li><b>Contém:</b> um <code>&lt;value&gt;</code>. Em <code>tree</code>, também outros <code>&lt;node&gt;</code> (os filhos).</li>
+          <li><b>Atributos:</b>
+            <ul>
+              <li><code>id</code> (obrigatório): identificador único, sem espaços e que não começa com dígito (<code>a1</code>, <code>raiz</code>).</li>
+            </ul>
+          </li>
+        </ul>
+      </article>
+
+      <article class="el" id="el-nodes">
+        <h3>&lt;nodes&gt;</h3>
+        <p>Conjunto de nós de uma <code>list</code> ou de um <code>graph</code>. A ordem dos nós é a ordem do documento.</p>
+        <ul>
+          <li><b>Contém:</b> um ou mais <code>&lt;node&gt;</code>, cada um só com <code>&lt;value&gt;</code>.</li>
+          <li><b>Atributos:</b> nenhum.</li>
+        </ul>
+      </article>
+
+      <article class="el" id="el-value">
+        <h3>&lt;value&gt;</h3>
+        <p>O conteúdo do nó, o que o leitor fala.</p>
+        <ul>
+          <li><b>Contém:</b> texto em uma linha, terminado em <code>.</code>, <code>!</code> ou <code>?</code>.</li>
+          <li><b>Atributos:</b> nenhum.</li>
+        </ul>
+      </article>
+
+      <article class="el" id="el-edges">
+        <h3>&lt;edges&gt;</h3>
+        <p>Conjunto de arestas. Só existe em <code>graph</code>. As saídas de um nó seguem a ordem em que as arestas aparecem aqui.</p>
+        <ul>
+          <li><b>Contém:</b> uma ou mais <code>&lt;edge&gt;</code>.</li>
+          <li><b>Atributos:</b> nenhum.</li>
+        </ul>
+      </article>
+
+      <article class="el" id="el-edge">
+        <h3>&lt;edge&gt;</h3>
+        <p>Aresta direcionada entre dois nós.</p>
+        <ul>
+          <li><b>Contém:</b> nada (elemento vazio).</li>
+          <li><b>Atributos:</b>
+            <ul>
+              <li><code>from</code> (obrigatório): <code>id</code> do nó de origem.</li>
+              <li><code>to</code> (obrigatório): <code>id</code> do nó de destino.</li>
+              <li><code>weight</code> (obrigatório): número inteiro, pode ser negativo ou zero. O significado (custo, prioridade...) é de quem lê.</li>
+            </ul>
+          </li>
+        </ul>
+      </article>
+    </section>
+
+    <section id="tipos">
+      <h2>2. Os três tipos</h2>
+      <div class="tabs" role="tablist" aria-label="Tipos de estrutura">
+        <button role="tab" id="tab-tree" aria-controls="painel-tree" aria-selected="true" type="button">tree</button>
+        <button role="tab" id="tab-list" aria-controls="painel-list" aria-selected="false" tabindex="-1" type="button">list</button>
+        <button role="tab" id="tab-graph" aria-controls="painel-graph" aria-selected="false" tabindex="-1" type="button">graph</button>
+      </div>
+      <div role="tabpanel" id="painel-tree" aria-labelledby="tab-tree">
+        <h3>2.1 – tree</h3>
+        <p>A hierarquia vem do aninhamento. <code>start</code> pode ser qualquer nó, não só a raiz.</p>
+        <div class="code"><div class="code-bar"><span>XML</span><button type="button" class="copy" aria-label="Copiar código">Copiar</button></div><pre><code>&lt;structure type="tree" start="raiz"&gt;
+  &lt;description&gt;Árvore com uma raiz e duas folhas.&lt;/description&gt;
+  &lt;node id="raiz"&gt;
+    &lt;value&gt;Raiz.&lt;/value&gt;
+    &lt;node id="a"&gt;&lt;value&gt;Folha A.&lt;/value&gt;&lt;/node&gt;
+    &lt;node id="b"&gt;&lt;value&gt;Folha B.&lt;/value&gt;&lt;/node&gt;
+  &lt;/node&gt;
+&lt;/structure&gt;</code></pre></div>
+      </div>
+      <div role="tabpanel" id="painel-list" aria-labelledby="tab-list" hidden>
+        <h3>2.2 – list</h3>
+        <p>O leitor começa em <code>i1</code> (o <code>start</code>), fala o <code>&lt;value&gt;</code> e, com a seta →, passa para <code>i2</code>.</p>
+        <div class="code"><div class="code-bar"><span>XML</span><button type="button" class="copy" aria-label="Copiar código">Copiar</button></div><pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;acml xmlns="http://acml.example.org/1.0" version="1.0" xml:lang="pt-BR"&gt;
+  &lt;structure type="list" start="i1"&gt;
+    &lt;description&gt;Lista de dois itens.&lt;/description&gt;
+    &lt;nodes&gt;
+      &lt;node id="i1"&gt;&lt;value&gt;Primeiro item.&lt;/value&gt;&lt;/node&gt;
+      &lt;node id="i2"&gt;&lt;value&gt;Segundo item.&lt;/value&gt;&lt;/node&gt;
+    &lt;/nodes&gt;
+  &lt;/structure&gt;
+&lt;/acml&gt;</code></pre></div>
+      </div>
+      <div role="tabpanel" id="painel-graph" aria-labelledby="tab-graph" hidden>
+        <h3>2.3 – graph</h3>
+        <p>Nós em <code>&lt;nodes&gt;</code> e ligações em <code>&lt;edges&gt;</code>. As arestas são direcionadas e podem formar ciclos.</p>
+        <div class="code"><div class="code-bar"><span>XML</span><button type="button" class="copy" aria-label="Copiar código">Copiar</button></div><pre><code>&lt;structure type="graph" start="a"&gt;
+  &lt;description&gt;Grafo com três nós e um ciclo.&lt;/description&gt;
+  &lt;nodes&gt;
+    &lt;node id="a"&gt;&lt;value&gt;Nó A.&lt;/value&gt;&lt;/node&gt;
+    &lt;node id="b"&gt;&lt;value&gt;Nó B.&lt;/value&gt;&lt;/node&gt;
+    &lt;node id="c"&gt;&lt;value&gt;Nó C.&lt;/value&gt;&lt;/node&gt;
+  &lt;/nodes&gt;
+  &lt;edges&gt;
+    &lt;edge from="a" to="b" weight="1"/&gt;
+    &lt;edge from="b" to="c" weight="-2"/&gt;
+    &lt;edge from="c" to="a" weight="0"/&gt;
+  &lt;/edges&gt;
+&lt;/structure&gt;</code></pre></div>
+      </div>
+    </section>
+
+    <section id="xsd">
+      <h2>3. Regras do XSD</h2>
+      <p>O <code>acml-1.0.xsd</code> valida a <strong>estrutura</strong> do arquivo. O <code>xml.xsd</code> declara o atributo <code>xml:lang</code> e deve ficar na mesma pasta, porque o schema o importa.</p>
+    </section>
+
+    <section id="consistencia">
+      <h2>4. Regras de consistência</h2>
+      <p>O XSD valida a estrutura. Estas regras são verificadas pelo <code>acml_validar.py</code>:</p>
+      <ol class="rules">
+        <li><code>tree</code> exige <code>&lt;node&gt;</code> e não admite <code>&lt;nodes&gt;</code> nem <code>&lt;edges&gt;</code>. <code>list</code> exige <code>&lt;nodes&gt;</code> e não admite <code>&lt;node&gt;</code> nem <code>&lt;edges&gt;</code>. <code>graph</code> exige <code>&lt;nodes&gt;</code> e não admite <code>&lt;node&gt;</code>.</li>
+        <li><code>start</code> deve ser o <code>id</code> de um nó da estrutura. Em <code>graph</code>, <code>from</code> e <code>to</code> também devem apontar para <code>id</code> existentes (garantido pelo XSD).</li>
+      </ol>
+    </section>
+
+    <section id="estruturas">
+      <h2>5. Estruturas de dados suportadas</h2>
+      <p>O ACML tem apenas três tipos de estrutura (<code>tree</code>, <code>list</code> e <code>graph</code>), mas cada um deles descreve várias estruturas de dados clássicas.</p>
+
+      <h3 id="listas">5.1 – Listas (<code>type="list"</code>)</h3>
+      <p>Nós em <code>&lt;nodes&gt;</code>, na ordem do documento. Com → e ← o leitor passa ao item seguinte e ao anterior. O <code>start</code> pode ser qualquer item.</p>
+      
+<article class="struct" id="lista-1">
+  <h4>Lista simples, vetor ou array unidimensional</h4>
+  <p>Itens em sequência, do primeiro ao último. É o caso base. A posição de um item é a sua ordem no documento.</p>
+  <figure><img src="img/image2.png" alt="Lista simples: cinco caixas em sequência, com os valores 12, 7, 25, 3 e 18." loading="lazy"><figcaption>Exemplo</figcaption></figure>
+  <div class="code"><div class="code-bar"><span>XML</span><button type="button" class="copy" aria-label="Copiar código">Copiar</button></div><pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;acml xmlns="http://acml.example.org/1.0" version="1.0" xml:lang="pt-BR"&gt;
+  &lt;structure type="list" start="i1"&gt;
+    &lt;description&gt;Lista de cinco números.&lt;/description&gt;
+    &lt;nodes&gt;
+      &lt;node id="i1"&gt;&lt;value&gt;12.&lt;/value&gt;&lt;/node&gt;
+      &lt;node id="i2"&gt;&lt;value&gt;7.&lt;/value&gt;&lt;/node&gt;
+      &lt;node id="i3"&gt;&lt;value&gt;25.&lt;/value&gt;&lt;/node&gt;
+      &lt;node id="i4"&gt;&lt;value&gt;3.&lt;/value&gt;&lt;/node&gt;
+      &lt;node id="i5"&gt;&lt;value&gt;18.&lt;/value&gt;&lt;/node&gt;
+    &lt;/nodes&gt;
+  &lt;/structure&gt;
+&lt;/acml&gt;</code></pre></div>
+</article>
+<article class="struct" id="lista-2">
+  <h4>Lista duplamente encadeada</h4>
+  <p>Cada item tem um seguinte e um anterior. O leitor já navega nos dois sentidos, então toda lista ACML se comporta assim.</p>
+  <figure><img src="img/image3.png" alt="Lista duplamente encadeada: quatro nós ligados nos dois sentidos." loading="lazy"><figcaption>Exemplo</figcaption></figure>
+  <div class="code"><div class="code-bar"><span>XML</span><button type="button" class="copy" aria-label="Copiar código">Copiar</button></div><pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;acml xmlns="http://acml.example.org/1.0" version="1.0" xml:lang="pt-BR"&gt;
+  &lt;structure type="list" start="i1"&gt;
+    &lt;description&gt;Lista duplamente encadeada de quatro números.&lt;/description&gt;
+    &lt;nodes&gt;
+      &lt;node id="i1"&gt;&lt;value&gt;12.&lt;/value&gt;&lt;/node&gt;
+      &lt;node id="i2"&gt;&lt;value&gt;7.&lt;/value&gt;&lt;/node&gt;
+      &lt;node id="i3"&gt;&lt;value&gt;25.&lt;/value&gt;&lt;/node&gt;
+      &lt;node id="i4"&gt;&lt;value&gt;3.&lt;/value&gt;&lt;/node&gt;
+    &lt;/nodes&gt;
+  &lt;/structure&gt;
+&lt;/acml&gt;</code></pre></div>
+</article>
+<article class="struct" id="lista-3">
+  <h4>Lista encadeada simples</h4>
+  <p>Escreve-se como lista comum. O arquivo não impede o caminho de volta, e o leitor de referência sempre o oferece.</p>
+  <figure><img src="img/image4.png" alt="Lista encadeada simples: quatro nós, cada um com um ponteiro next para o seguinte." loading="lazy"><figcaption>Exemplo</figcaption></figure>
+  <div class="code"><div class="code-bar"><span>XML</span><button type="button" class="copy" aria-label="Copiar código">Copiar</button></div><pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;acml xmlns="http://acml.example.org/1.0" version="1.0" xml:lang="pt-BR"&gt;
+  &lt;structure type="list" start="i1"&gt;
+    &lt;description&gt;Lista encadeada simples de quatro números.&lt;/description&gt;
+    &lt;nodes&gt;
+      &lt;node id="i1"&gt;&lt;value&gt;12.&lt;/value&gt;&lt;/node&gt;
+      &lt;node id="i2"&gt;&lt;value&gt;7.&lt;/value&gt;&lt;/node&gt;
+      &lt;node id="i3"&gt;&lt;value&gt;25.&lt;/value&gt;&lt;/node&gt;
+      &lt;node id="i4"&gt;&lt;value&gt;3.&lt;/value&gt;&lt;/node&gt;
+    &lt;/nodes&gt;
+  &lt;/structure&gt;
+&lt;/acml&gt;</code></pre></div>
+</article>
+<article class="struct" id="lista-4">
+  <h4>Lista circular</h4>
+  <p>O arquivo é uma lista comum. Fazer o último item voltar ao primeiro é opção do leitor (--circular no acml_leitor.py), não do arquivo.</p>
+  <figure><img src="img/image1.png" alt="Lista circular: o next do último nó aponta de volta para o primeiro." loading="lazy"><figcaption>Exemplo</figcaption></figure>
+  <div class="code"><div class="code-bar"><span>XML</span><button type="button" class="copy" aria-label="Copiar código">Copiar</button></div><pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;acml xmlns="http://acml.example.org/1.0" version="1.0" xml:lang="pt-BR"&gt;
+  &lt;structure type="list" start="i1"&gt;
+    &lt;description&gt;Lista circular de quatro números.&lt;/description&gt;
+    &lt;nodes&gt;
+      &lt;node id="i1"&gt;&lt;value&gt;12.&lt;/value&gt;&lt;/node&gt;
+      &lt;node id="i2"&gt;&lt;value&gt;7.&lt;/value&gt;&lt;/node&gt;
+      &lt;node id="i3"&gt;&lt;value&gt;25.&lt;/value&gt;&lt;/node&gt;
+      &lt;node id="i4"&gt;&lt;value&gt;3.&lt;/value&gt;&lt;/node&gt;
+    &lt;/nodes&gt;
+  &lt;/structure&gt;
+&lt;/acml&gt;</code></pre></div>
+</article>
+<article class="struct" id="lista-5">
+  <h4>Pilha (stack)</h4>
+  <p>Itens do topo para a base, ou o inverso. O ACML guarda só a ordem; a regra LIFO é de quem lê.</p>
+  <figure><img src="img/image7.png" alt="Pilha: i1 (start) com valor 3 no topo, depois 25, 7 e 12 na base; push e pop pelo topo." loading="lazy"><figcaption>Exemplo</figcaption></figure>
+  <div class="code"><div class="code-bar"><span>XML</span><button type="button" class="copy" aria-label="Copiar código">Copiar</button></div><pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;acml xmlns="http://acml.example.org/1.0" version="1.0" xml:lang="pt-BR"&gt;
+  &lt;structure type="list" start="i1"&gt;
+    &lt;description&gt;Pilha de quatro números, do topo para a base.&lt;/description&gt;
+    &lt;nodes&gt;
+      &lt;node id="i1"&gt;&lt;value&gt;3.&lt;/value&gt;&lt;/node&gt;
+      &lt;node id="i2"&gt;&lt;value&gt;25.&lt;/value&gt;&lt;/node&gt;
+      &lt;node id="i3"&gt;&lt;value&gt;7.&lt;/value&gt;&lt;/node&gt;
+      &lt;node id="i4"&gt;&lt;value&gt;12.&lt;/value&gt;&lt;/node&gt;
+    &lt;/nodes&gt;
+  &lt;/structure&gt;
+&lt;/acml&gt;</code></pre></div>
+</article>
+<article class="struct" id="lista-6">
+  <h4>Fila (queue)</h4>
+  <p>Itens da frente para o fim. O ACML guarda só a ordem; a regra FIFO é de quem lê.</p>
+  <figure><img src="img/image5.png" alt="Fila: quatro itens da frente para o fim." loading="lazy"><figcaption>Exemplo</figcaption></figure>
+  <div class="code"><div class="code-bar"><span>XML</span><button type="button" class="copy" aria-label="Copiar código">Copiar</button></div><pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;acml xmlns="http://acml.example.org/1.0" version="1.0" xml:lang="pt-BR"&gt;
+  &lt;structure type="list" start="i1"&gt;
+    &lt;description&gt;Fila de quatro números, da frente para o fim.&lt;/description&gt;
+    &lt;nodes&gt;
+      &lt;node id="i1"&gt;&lt;value&gt;12.&lt;/value&gt;&lt;/node&gt;
+      &lt;node id="i2"&gt;&lt;value&gt;7.&lt;/value&gt;&lt;/node&gt;
+      &lt;node id="i3"&gt;&lt;value&gt;25.&lt;/value&gt;&lt;/node&gt;
+      &lt;node id="i4"&gt;&lt;value&gt;3.&lt;/value&gt;&lt;/node&gt;
+    &lt;/nodes&gt;
+  &lt;/structure&gt;
+&lt;/acml&gt;</code></pre></div>
+</article>
+<article class="struct" id="lista-7">
+  <h4>Deque (fila de duas pontas)</h4>
+  <p>As duas pontas são o primeiro e o último item da lista.</p>
+  <figure><img src="img/image6.png" alt="Deque: quatro itens com inserção e remoção nas duas pontas." loading="lazy"><figcaption>Exemplo</figcaption></figure>
+  <div class="code"><div class="code-bar"><span>XML</span><button type="button" class="copy" aria-label="Copiar código">Copiar</button></div><pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;acml xmlns="http://acml.example.org/1.0" version="1.0" xml:lang="pt-BR"&gt;
+  &lt;structure type="list" start="i1"&gt;
+    &lt;description&gt;Deque de quatro números, da frente para o fundo.&lt;/description&gt;
+    &lt;nodes&gt;
+      &lt;node id="i1"&gt;&lt;value&gt;12.&lt;/value&gt;&lt;/node&gt;
+      &lt;node id="i2"&gt;&lt;value&gt;7.&lt;/value&gt;&lt;/node&gt;
+      &lt;node id="i3"&gt;&lt;value&gt;25.&lt;/value&gt;&lt;/node&gt;
+      &lt;node id="i4"&gt;&lt;value&gt;3.&lt;/value&gt;&lt;/node&gt;
+    &lt;/nodes&gt;
+  &lt;/structure&gt;
+&lt;/acml&gt;</code></pre></div>
+</article>
+
+      <h3 id="arvores">5.2 – Árvores (<code>type="tree"</code>)</h3>
+      <p>Um único <code>&lt;node&gt;</code> raiz com <code>&lt;node&gt;</code> aninhados como filhos. O leitor sobe ao pai (↑), desce ao primeiro filho (↓) e anda entre irmãos (→ e ←). O <code>start</code> pode ser qualquer nó, o que permite começar o percurso numa subárvore.</p>
+      <dl class="defs">
+        <dt>Árvore geral (n-ária)</dt><dd>Cada nó tem qualquer número de filhos, em qualquer profundidade. É o caso base. Cobre hierarquias como organograma, pastas e arquivos, sumário e árvore de decisão.</dd>
+        <dt>Árvore binária</dt><dd>Nós com no máximo dois filhos. O XSD não impõe esse limite; ele é convenção de quem escreve. Não existe atributo de esquerda e direita: vale a ordem dos filhos no documento (por convenção, o primeiro é o esquerdo). Quando há um só filho, diga no <code>&lt;value&gt;</code> de que lado ele está.</dd>
+        <dt>Árvore binária de busca, AVL e rubro-negra</dt><dd>São árvores binárias com regras de ordem, balanceamento ou cor. O ACML descreve a forma e o valor de cada nó, sem verificar as regras. A cor ou o fator de balanceamento podem entrar no texto do <code>&lt;value&gt;</code>.</dd>
+        <dt>Heap (mínimo ou máximo)</dt><dd>Árvore binária completa com regra de ordem entre pai e filho. Vale a mesma observação: a regra não é verificada.</dd>
+        <dt>Árvore de prefixos (trie)</dt><dd>Um nó por símbolo; o caminho da raiz até um nó forma a palavra. O <code>&lt;value&gt;</code> de cada nó fala o símbolo.</dd>
+        <dt>Árvore B e B+</dt><dd>Cada nó é um bloco de chaves, escrito no <code>&lt;value&gt;</code>, e os filhos vêm por aninhamento. A ligação entre as folhas da B+ não é representável em <code>tree</code> (use <code>graph</code>).</dd>
+      </dl>
+
+      <h3 id="grafos">5.3 – Grafos (<code>type="graph"</code>)</h3>
+      <p>Nós em <code>&lt;nodes&gt;</code> e arestas direcionadas em <code>&lt;edges&gt;</code>, que é opcional. Com ↓ e ↑ o leitor escolhe a saída, com → segue a saída escolhida e com ← volta pelo histórico.</p>
+      <dl class="defs">
+        <dt>Grafo direcionado (dígrafo)</dt><dd>Cada <code>&lt;edge&gt;</code> vai de <code>from</code> a <code>to</code>. É o caso base.</dd>
+        <dt>Grafo não direcionado</dt><dd>Escreve-se com duas arestas, uma em cada sentido (de <code>a</code> para <code>b</code> e de <code>b</code> para <code>a</code>), de preferência com o mesmo peso. Não existe aresta sem direção.</dd>
+        <dt>Grafo ponderado</dt><dd>Todo <code>&lt;edge&gt;</code> tem <code>weight</code>, um inteiro positivo, zero ou negativo. O significado do peso é de quem lê.</dd>
+        <dt>Grafo não ponderado</dt><dd>Como <code>weight</code> é obrigatório, use o mesmo valor fixo (por exemplo, <code>1</code>) em todas as arestas.</dd>
+        <dt>Grafo com pesos negativos</dt><dd>Permitido, pois <code>weight</code> aceita qualquer inteiro.</dd>
+        <dt>Grafo cíclico</dt><dd>Ciclos são permitidos, como o ciclo entre os nós A, B e C do exemplo da seção 2.</dd>
+        <dt>Grafo acíclico direcionado (DAG)</dt><dd>O ACML aceita, mas não verifica que não há ciclos.</dd>
+        <dt>Grafo com laços</dt><dd>Uma aresta com <code>from</code> e <code>to</code> iguais não é proibida pelo XSD.</dd>
+        <dt>Multigrafo (arestas paralelas)</dt><dd>Várias arestas entre o mesmo par de nós não são proibidas pelo XSD. A ordem em <code>&lt;edges&gt;</code> define a ordem das saídas.</dd>
+        <dt>Grafo desconexo e nós isolados</dt><dd>Nós sem arestas são permitidos. O leitor só chega aos nós alcançáveis a partir do nó atual, e Home volta ao <code>start</code>.</dd>
+        <dt>Grafos com propriedades especiais (completo, bipartido, conexo, planar, regular)</dt><dd>Descrevem-se como qualquer grafo; a propriedade não é verificada.</dd>
+      </dl>
+    </section>
+
+    <section id="nao-suporta">
+      <h2>6. O que o ACML 1.0 não suporta</h2>
+      <ul class="plain">
+        <li>Mais de uma estrutura por arquivo, como uma floresta com várias raízes ou uma lista de listas.</li>
+        <li>Ligações extras em <code>tree</code> e <code>list</code>, como filhos compartilhados, ligação entre folhas ou ponteiros adicionais. Para isso use <code>graph</code>.</li>
+        <li>Atributos em nós além de <code>id</code> e <code>&lt;value&gt;</code>, e rótulos ou atributos em arestas além de <code>weight</code>.</li>
+        <li>Distinção formal entre filho esquerdo e direito.</li>
+        <li>Arestas sem direção e hipergrafos (arestas com mais de dois nós).</li>
+        <li>Estruturas que não são feitas de nós e ligações, como matrizes, tabelas hash e tabelas com linhas e colunas. Só podem ser descritas achatadas em <code>list</code> ou <code>graph</code>.</li>
+      </ul>
+    </section>
+
+    <footer>ACML 1.0 · documentação</footer>
+  </main>
+</div>
+
+<script src="js/cabecalho.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>
