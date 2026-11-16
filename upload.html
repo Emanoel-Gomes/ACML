@@ -3,11 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Enviar arquivo .acml – ACML 1.0</title>
-<meta name="description" content="Envie um arquivo .acml para verificar as regras do formato e visualizar a estrutura direto no navegador.">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/upload.css">
+<title>Enviar arquivo .acml</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="upload.css">
 </head>
 <body class="page-upload">
 <a class="skip" href="#conteudo">Pular para o conteúdo</a>
@@ -46,30 +44,29 @@
 
   <p class="formats">Formato aceito: .acml</p>
 
+  <div class="exemplos" role="group" aria-labelledby="exemplosRot">
+    <p class="exemplos-rot" id="exemplosRot">Sem um arquivo? Experimente um exemplo:</p>
+    <div class="exemplos-botoes">
+      <button class="btn-exemplo" type="button" data-exemplo="lista">Exemplo de lista</button>
+      <button class="btn-exemplo" type="button" data-exemplo="arvore">Exemplo de árvore</button>
+      <button class="btn-exemplo" type="button" data-exemplo="grafo">Exemplo de grafo</button>
+    </div>
+  </div>
+
   <section id="resultado" class="result" aria-live="polite" hidden>
     <h2>Verificação local</h2>
     <ul id="listaResultado"></ul>
     <p class="hint">Esta verificação usa as regras da documentação, direto no navegador. Ela não substitui o <code>xmllint</code> com o <code>acml-1.0.xsd</code>.</p>
   </section>
 
-  <section id="visualizacao" class="result viz" hidden>
-    <h2>Visualização</h2>
-    <p class="viz-info" id="vizInfo"></p>
-    <div class="viz-quadro">
-      <div class="viz-cab" id="vizCab" aria-live="polite" aria-atomic="true"></div>
-      <div class="viz-tela" id="vizTela" tabindex="0" role="group" aria-label="Desenho da estrutura. Use as setas do teclado para navegar entre os nós."></div>
-    </div>
-  </section>
-
   <div class="actions">
     <button class="btn-text" id="cancelBtn" type="button">Cancelar</button>
-    <button class="btn-primary" id="uploadBtn" type="button" disabled>Enviar</button>
+    <button class="btn-primary" id="uploadBtn" type="button" disabled>Abrir resultado</button>
   </div>
 </main>
 
-<script src="js/cabecalho.js"></script>
-<script src="js/desenho.js"></script>
-<script src="js/navegacao.js"></script>
-<script src="js/upload.js"></script>
+<script src="cabecalho.js"></script>
+<script src="exemplos.js"></script>
+<script src="upload.js"></script>
 </body>
 </html>
